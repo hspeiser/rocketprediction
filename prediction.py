@@ -5,14 +5,23 @@ import matplotlib.pyplot as plt
 # Constants
 g = 9.81     # Acceleration due to gravity
 A = 4.67e-4  # Cross-sectional area
+"""
+launch_mass_before_burn = 0.0518 # kg
+launch_mass_after_burn = launch_mass_before_burn - 0.006  # kg
+launch_mass_during_burn = (launch_mass_before_burn + launch_mass_after_burn) / 2 # kg
+average_burning_time = 0.952     # seconds
+average_thrust = 4.45            # Newton
+Cd = 0.749                  # Drag coefficient
 
-# Inputs
-launch_mass_before_burn = 0.0548 # kg
-launch_mass_during_burn = 0.0518 # kg
-launch_mass_after_burn = 0.0488  # kg
-average_burning_time = 0.888     # seconds
-average_thrust = 4.635247748     # Newton
-Cd = 1.03                        # Drag coefficient
+
+"""
+#Henry Numbers
+launch_mass_before_burn = 0.0554 # kg
+launch_mass_after_burn = launch_mass_before_burn - 0.006  # kg
+launch_mass_during_burn = (launch_mass_before_burn + launch_mass_after_burn) / 2 # kg
+average_burning_time = 0.963     # seconds
+average_thrust = 4.44            # Newton
+Cd = 0.74946466                  # Drag coefficient
 
 # Lists to store results
 t_values = []
@@ -28,6 +37,11 @@ t = 0.0
 h = 0.0
 v = 0.0
 a = 0.0
+
+t_values.append(t)
+h_values.append(h)
+v_values.append(v)
+a_values.append(a)
 
 # Perform calculations
 while t <= 6.0:  # up to 6 seconds
@@ -56,15 +70,17 @@ while t <= 6.0:  # up to 6 seconds
 
     # Increase time
     t += dt
-
 # Find the maximum height
 max_height_index = v_values.index(next(x for x in v_values if x < 0))  # find the index where velocity changes sign
-if t_values[max_height_index] >= average_burning_time + 4:  # if the rocket is coming down when the ejection charge fires
-    max_height = max(h_values)
-else:  # if the rocket is still ascending when the ejection charge fires
+
+# If the rocket is still ascending when the ejection charge fires
+if t_values[max_height_index] < average_burning_time + 4:  
     max_height = h_values[max_height_index] + 2
+else:  # if the rocket is coming down when the ejection charge fires
+    max_height = max(h_values)
+
     
-    # Find the maximum velocity and acceleration
+# Find the maximum velocity and acceleration
 max_velocity = max(v_values)
 max_acceleration = max(a_values)
 
